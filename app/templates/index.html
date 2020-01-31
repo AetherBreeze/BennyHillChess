@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <!-- scaling for mobile devices -->
+
+        <link rel="stylesheet" href="{{url_for('static', filename='css/chessboard-1.0.0.min.css')}}"> <!-- chessboard CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> <!-- bootstrap CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}"> <!-- custom CSS -->
+
+        <style>
+            body {
+                background-image: url({{ url_for('static', filename='img/backdrops/felt.png') }})
+            }
+
+            #alertWindowMain {
+                background-image: url({{ url_for('static', filename='img/layout/alert_window_bg.png') }});
+                background-repeat: repeat-y;
+                background-size: unset;
+            }
+
+            #onlinePlayerList {
+                background-image: url({{ url_for('static', filename='img/layout/list_bg.png') }});
+                background-repeat: repeat-y;
+                background-size: unset;
+            }
+        </style>
+
+        <script src="{{url_for('static', filename='js/jquery-3.4.1.min.js')}}"></script> <!-- jQuery -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script> <!-- popper JS (required for bootstrap JS) -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> <!-- bootstrap JS -->
+        <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script> <!-- SocketIO -->
+    </head>
+    <body>
+        <nav id="mainNavbar" class="navbar">
+            <a class="navbar-brand mb=0 h1" href="#" style="color: white">Benny Hill Chess</a>
+            <span id="navbarGreeting" class="navbar-text">Welcome,
+                <span id="navbarUsername">
+                    {{ user.username }}
+                </span>!
+            </span>
+        </nav>
+        <div id="mainDiv">
+            <div id="mainRow" class="row">
+                <div id="leftCol" class="col">
+                    <div id="geniusOMeter">
+                        <img id="geniusOMeterTop" class="geniusOMeterPart" src="{{ url_for('static', filename='img/layout/gom_top.png') }}">
+                        <div id="geniusOMeterMid" class="geniusOMeterPart">
+                            <img id="geniusOMeterMidEmpty" class="geniusOMeterMidPart" src="{{ url_for('static', filename='img/layout/gom_mid.png') }}">
+                            <img id="geniusOMeterMidFull" class="geniusOMeterMidPart" src="{{ url_for('static', filename='img/layout/gom_bg.png') }}">
+                        </div>
+                        <img id="geniusOMeterBot" class="geniusOMeterPart" src="{{ url_for('static', filename='img/layout/gom_bot_1.png') }}">
+                    </div>
+                </div>
+                <div id="middleCol" class="col-7">
+                    <div id="enemyPlayer" class="playerDiv">
+                        <img id="enemyAvatar" class="avatar" src="{{ url_for('static', filename='img/avatars/stockfish.png') }}">
+                        <span id="enemyName" class="boardName">Computer Overlords</span>
+                    </div>
+                    <div id="myBoard"></div>
+                    <div id="thisPlayer" class="playerDiv">
+                        <img id="thisAvatar" class="avatar" src=" {{ url_for('static', filename='img/avatars/default.png') }}">
+                        <span id="thisName" class="boardName">{{ user.username }}</span>
+                    </div>
+                    <div id="postGameButtons"></div>
+                    <hr id="logSeperator">
+                    <label>Game log: </label>
+                    <div id="log"></div>
+                </div>
+                <div id="rightCol" class="col">
+                    <div id="onlinePlayerDiv">
+                        <img id="listTopGraphic" class="rightColListPart" src="{{ url_for('static', filename='img/layout/list_top.png') }}">
+                        <ul id="onlinePlayerList" class="list-unstyled rightColListPart">
+                            {% for other_user in all_users %}
+                                <li id="{{ other_user.id }}" class="userInList" onmouseenter="openUserMenu({{ other_user.id }})" onmouseleave="closeUserMenu({{ other_user.id }})">
+                                    <span class="userInListName"> {{ other_user.username }} </span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <img id="listBotGraphic" class="rightColListPart" src="{{ url_for('static', filename='img/layout/list_bot.png') }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            function changeMeterText(newMeterLevel) { // have to put these here, since we need resource URLs from jinja
+                if(newMeterLevel == 100) { // takes slightly longer than the other way around, since it'll usually be lower volumes (hopefully), but code is slightly cleaner this way
+                    $("#geniusOMeterBot").attr("src", "{{ url_for('static', filename='img/layout/gom_bot_6.png') }}")
+                }
+                else if(newMeterLevel > 80) {
+                    $("#geniusOMeterBot").attr("src", "{{ url_for('static', filename='img/layout/gom_bot_5.png') }}")
+                }
+                else if(newMeterLevel > 60) {
+                    $("#geniusOMeterBot").attr("src", "{{ url_for('static', filename='img/layout/gom_bot_4.png') }}")
+                }
+                else if(newMeterLevel > 40) {
+                    $("#geniusOMeterBot").attr("src", "{{ url_for('static', filename='img/layout/gom_bot_3.png') }}")
+                }
+                else if(newMeterLevel > 20) {
+                    $("#geniusOMeterBot").attr("src", "{{ url_for('static', filename='img/layout/gom_bot_2.png') }}")
+                }
+                else {
+                    $("#geniusOMeterBot").attr("src", "{{ url_for('static', filename='img/layout/gom_bot_1.png') }}")
+                }
+            }
+
+            function showAlert(innerHtml) {
+                $("#rightCol").prepend("<div id='alertWindow'><img id='alertWindowTop' class='rightColListPart' src='{{ url_for('static', filename='img/layout/alert_window_top.png') }}'><div id='alertWindowMain' class='rightColListPart'><div id='alertWindowContent'>" + innerHtml + "</div></div><img id='alertWindowBot' class='rightColListPart' src='{{ url_for('static', filename='img/layout/alert_window_bot.png') }}'></div>")
+            }
+
+            function removeAlert() {
+                $("#alertWindow").remove()
+            }
+        </script>
+        <script src="{{url_for('static', filename='js/chessboard-1.0.0.min.js')}}"></script> <!-- chessboard JS -->
+        <script src="{{url_for('static', filename='js/chess.min.js')}}"></script> <!-- chess game JS -->
+        <script src="{{url_for('static', filename='js/iomain.js')}}"></script> <!-- generic websocket utils -->
+        <script src="{{url_for('static', filename='js/chessmain.js')}}"></script> <!-- generic chess utils used by both one- and two- player -->
+        <script src="{{url_for('static', filename='js/oneplayer.js')}}"></script> <!-- singleplayer JS -->
+        <script src="{{url_for('static', filename='js/twoplayer.js')}}"></script> <!--multiplayer JS-->
+    </body>
+</html>

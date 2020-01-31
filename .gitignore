@@ -1,0 +1,10 @@
+.flaskenv
+resources/engines/stockfish/x64_*
+venv/*
+.idea/*
+__pycache__/
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

@@ -1,0 +1,179 @@
+.avatar {
+    border-radius: 20%;
+    margin-left: 9%;
+    margin-right: 1%;
+    width: 5%;
+}
+
+.boardName {
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.challengeButton {
+    color: #333333;
+}
+
+.geniusOMeterPart {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.geniusOMeterMidPart {
+    display: block;
+    height: auto;
+    max-width: 120px;
+    margin: 0 auto;
+    width: 32%;
+}
+
+.rightColListPart {
+    width: 97%;
+    max-width: 359px;
+}
+
+.userInListName {
+    margin-left: 5%;
+}
+
+.spectateButton {
+    color: #333333;
+}
+
+#alertButtonsDiv {
+    margin-top: 5px;
+}
+
+#acceptChallenge {
+    margin-left: 25%;
+}
+
+#alertMessage {
+    margin: 0 auto;
+}
+
+#alertWindow {
+    margin-bottom: 3%;
+}
+
+#alertWindowTop {
+    display: block;
+}
+
+#alertWindowBot {
+    display: block;
+}
+
+#alertWindowContent {
+    margin-left: 5%;
+}
+
+#declineChallenge {
+    margin-left: 5%;
+}
+
+#enemyName {
+    vertical-align: bottom;
+}
+
+#enemyPlayer {
+    margin-top: 2%;
+}
+
+#geniusOMeter {
+    margin-top: 15%;
+}
+
+#geniusOMeterBot {
+    height: 11%;
+    max-height: 78px;
+    width: 71%;
+}
+
+#geniusOMeterMid {
+    margin-bottom: 2%;
+    position: relative;
+    margin-top: 5%;
+}
+
+#geniusOMeterMidFull {
+    clip-path: inset(100% 0 0 0);
+    bottom: 0;
+    font-size: 0; /* tracks the level to which the meter is full; this is the only way to animate clip-path in jquery */
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 0;
+}
+
+#geniusOMeterTop {
+    height: 20%;
+    max-height: 140px;
+    max-width: 174px;
+    width: 47%;
+}
+
+#leaveGameButton {
+    margin-left: 34%;
+    margin-right: 5%;
+}
+
+#listTopGraphic {
+    margin: 0 auto;
+}
+
+#listBotGraphic {
+    display: block;
+    margin-top: 3%;
+}
+
+#logSeperator {
+    color: #222222;
+    height: 1px;
+    width: 75%;
+}
+
+#mainNavbar {
+    background-color: #252B29;
+}
+
+#myBoard {
+    margin: 2% auto;
+    width: 70%;
+    max-width: 650px;
+}
+
+#navbarGreeting {
+    color: #aaaaaa;
+}
+
+#navbarUsername {
+    color: #eeeeee;
+}
+
+#onlinePlayerList {
+    margin-bottom: -3%;
+}
+
+#playerDiv {
+    margin-left: 5%;
+}
+
+#postGameButtons {
+    margin: 0 auto;
+    width: 60%;
+}
+
+#recievedChallenge {
+    display: none;
+}
+
+#rightCol {
+    margin-top: 35px;
+}
+
+#thisName {
+    vertical-align: top;
+}
