@@ -2,6 +2,7 @@ from app.models import GuestUser
 from flask_socketio import close_room
 from game import Game
 from random import seed, random
+from os import urandom
 
 
 
@@ -12,7 +13,7 @@ class GameHandler:
         self.__master_games_list = {}
         self.__queue = []
 
-        seed(105116115116104101115101101100)
+        seed(urandom(1)[0]) # initialize with a random seed between 0 and 255
 
     def get_match_by_id(self, match_id):
         return self.__master_games_list.get(match_id)
