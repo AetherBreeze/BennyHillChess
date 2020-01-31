@@ -1,4 +1,4 @@
-from app import socketio_handler, webapp, webapp_db
+from app import socketio_handler, application, webapp_db
 from app.models import GuestUser
 
 if __name__ == "__main__":
@@ -7,4 +7,4 @@ if __name__ == "__main__":
         user.online = False
     webapp_db.session.commit()
 
-    socketio_handler.run(webapp)
+    socketio_handler.run(application)

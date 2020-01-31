@@ -1,13 +1,13 @@
-from app import socketio_handler, webapp, webapp_db, master_game_handler
+from app import socketio_handler, application, webapp_db, master_game_handler
 from app.models import GuestUser
-from utils.database import delete_all_items, sign_on_user, sign_off_user
+from utils.database import sign_on_user, sign_off_user
 from utils.users import add_guest_user
 from flask import request, render_template, send_from_directory, session
 from flask_socketio import emit
 
 
-@webapp.route("/")
-@webapp.route("/index.html")
+@application.route("/")
+@application.route("/index.html")
 def default():
     username_or_none = session.get("username")
     if username_or_none is None: # if this is a new session
@@ -25,18 +25,18 @@ def default():
 
 
 # favicon server
-@webapp.route("/favicon.ico")
+@application.route("/favicon.ico")
 def favicon():
     return send_from_directory("static", "favicon.ico")
 
 # simple util to serve images of chess pieces
-@webapp.route("/img/<path:filename>")
+@application.route("/img/<path:filename>")
 def serve_piece_imgs(filename):
     return send_from_directory("static/img", filename)
 
 
 # simple util to serve yakety sax
-@webapp.route("/audio/<path:filename>")
+@application.route("/audio/<path:filename>")
 def serve_music(filename):
     return send_from_directory("static/audio", filename)
 
